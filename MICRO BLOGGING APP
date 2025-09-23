@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Microblogging App</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      color: #2c3e50;
+      font-size: 2.5rem;
+    }
+
+    .post-box {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+    }
+
+    .post-box textarea {
+      resize: none;
+      padding: 10px;
+      font-size: 1.1rem;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      width: 100%;
+      height: 100px;
+      margin-bottom: 10px;
+    }
+
+    .post-box button {
+      padding: 10px;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+
+    .post-box button:hover {
+      background-color: #2980b9;
+    }
+
+    .posts {
+      margin-top: 20px;
+    }
+
+    .post {
+      background-color: #fff;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .post p {
+      font-size: 1.2rem;
+      line-height: 1.6;
+    }
+
+    .post button {
+      align-self: flex-end;
+      padding: 5px 10px;
+      background-color: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .post button:hover {
+      background-color: #c0392b;
+    }
+
+    .post button.edit {
+      background-color: #f39c12;
+    }
+
+    .post button.edit:hover {
+      background-color: #e67e22;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Microblogging App</h1>
+      <p>Share your thoughts with the world!</p>
+    </header>
+
+    <div class="post-box">
+      <textarea id="postInput" placeholder="What's on your mind?"></textarea>
+      <button id="postButton">Post</button>
+    </div>
+
+    <div class="posts" id="postsContainer">
+      <!-- Posts will appear here -->
+    </div>
+  </div>
+
+  <script>
+    const postButton = document.getElementById('postButton');
+    const postInput = document.getElementById('postInput');
+    const postsContainer = document.getElementById('postsContainer');
+
+    let posts = []; // This will store posts temporarily
+
+    // Function to render posts
+    function renderPosts() {
+      postsContainer.innerHTML = ''; // Clear posts container
+      posts.forEach((post, index) => {
+        const postDiv = document.createElement('div');
+        postDiv.classList.add('post');
+        
+        const postText = document.createElement('p');
+        postText.textContent = post.text;
+        
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.classList.add('edit');
+        editButton.onclick = () => editPost(index);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = () => deletePost(index);
+        
+        postDiv.appendChild(postText);
+        postDiv.appendChild(editButton);
+        postDiv.appendChild(deleteButton);
+        
+        postsContainer.appendChild(postDiv);
+      });
+    }
+
+    // Function to handle the posting
+    postButton.addEventListener('click', () => {
+      const text = postInput.value.trim();
+      if (text !== '') {
+        const newPost = {
+          text: text
+        };
+        posts.push(newPost);
+        postInput.value = ''; // Clear the input
+        renderPosts(); // Re-render posts
+      }
+    });
+
+    // Function to delete a post
+    function deletePost(index) {
+      posts.splice(index, 1); // Remove the post from the array
+      renderPosts(); // Re-render posts
+    }
+
+    // Function to edit a post
+    function editPost(index) {
+      const newText = prompt('Edit your post:', posts[index].text);
+      if (newText !== null && newText.trim() !== '') {
+        posts[index].text = newText;
+        renderPosts(); // Re-render posts
+      }
+    }
+  </script>
+
+</body>
+</html>
